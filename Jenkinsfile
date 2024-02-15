@@ -8,12 +8,7 @@ node {
 
             app = docker.build("imotszeged/test-boot")
        }
-      stage('Test image') {
-            app.inside {
 
-             sh 'echo "Tests passed"'
-            }
-        }
        stage('Push image') {
                                                   docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_id') {
        app.push("${env.BUILD_NUMBER}")
