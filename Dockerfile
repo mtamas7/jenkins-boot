@@ -1,17 +1,19 @@
-# Use an official Maven image as the base image
-FROM maven:3.8.4-openjdk-17-slim AS build
-# Set the working directory in the container
-WORKDIR /app
-# Copy the pom.xml and the project files to the container
-COPY pom.xml .
-COPY src ./src
-# Build the application using Maven
-RUN mvn clean package -DskipTests
-# Use an official OpenJDK image as the base image
-FROM openjdk:11-jre-slim
-# Set the working directory in the container
-WORKDIR /app
-# Copy the built JAR file from the previous stage to the container
-COPY - from=build /app/target/jenkins-boot-0.0.1-SNAPSHOT.jar .
-# Set the command to run the application
-CMD ["java", "-jar", "my-application.jar"]
+# AS <NAME> to name this stage as maven
+FROM maven:3.6.3 AS maven
+
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+# Compile and package the application to an executable JAR
+RUN mvn package
+
+# For Java 11,
+FROM adoptopenjdk/openjdk17:alpine-jre
+
+ARG JAR_FILE=jenkins-boot-0.0.1-SNAPSHOT.jar
+
+WORKDIR /opt/app
+
+# Copy the spring-boot-api-tutorial.jar from the maven stage to the /opt/app directory of the current stage.
+COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
+
+ENTRYPOINT ["java","-jar","jenkins-boot-0.0.1-SNAPSHOT.jar"]
