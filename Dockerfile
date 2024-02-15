@@ -1,19 +1,13 @@
-# AS <NAME> to name this stage as maven
-FROM maven:3.6.3 AS maven
+FROM openjdk:17-jdk-slim AS build
 
-WORKDIR /usr/src/app
-COPY . /usr/src/app
-# Compile and package the application to an executable JAR
-RUN mvn package
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+RUN ./mvnw dependency:resolve
 
-# For Java 11,
-FROM adoptopenjdk/openjdk17:alpine-jre
+COPY src src
+RUN ./mvnw package
 
-ARG JAR_FILE=jenkins-boot-0.0.1-SNAPSHOT.jar
-
-WORKDIR /opt/app
-
-# Copy the spring-boot-api-tutorial.jar from the maven stage to the /opt/app directory of the current stage.
-COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
-
-ENTRYPOINT ["java","-jar","jenkins-boot-0.0.1-SNAPSHOT.jar"]
+FROM openjdk:17-jdk-slim
+WORKDIR demo
+COPY --from=build target/*.jar demo.jar
+ENTRYPOINT ["java", "-jar", "demo.jar"]
