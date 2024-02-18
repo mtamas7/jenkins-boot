@@ -18,10 +18,9 @@ node {
 
              stage('Trigger deploy..') {
 
-                steps {
 
                    sh """curl https://api.render.com/deploy/srv-cn92e6v109ks739s1sj0?key=QSUb0v-o00E"""
 
-                }
              }
         }
+k
