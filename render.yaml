@@ -41,6 +41,9 @@ services:
     region: frankfurt
     plan: free
     healthCheckPath: /
+    registryCredential: # optional (defaults to no credential)
+      fromRegistryCreds:
+        name: dockerhub
     envVars:
       - key: SPRING_DATASOURCE_CONNECTION_STRING
         fromDatabase:
