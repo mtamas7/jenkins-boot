@@ -1,26 +1,22 @@
 node {
-      def app
-      stage('Clone repository') {
+    def app
 
-            checkout scm
-      }
-      stage('Build image') {
+    stage('Clone repository') {
+        checkout scm
+    }
 
-            app = docker.build("imotszeged/test-boot")
-       }
+    stage('Build image') {
+        app = docker.build("imotszeged/test-boot")
+    }
 
-       stage('Push image') {
-                                                  docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_id') {
-       app.push("${env.BUILD_NUMBER}")
-       app.push("latest")
-              }
-           }
-
-             stage('Trigger deploy..') {
-
-
-                   sh """curl https://api.render.com/deploy/srv-cn92e6v109ks739s1sj0?key=QSUb0v-o00E"""
-
-             }
+    stage('Push image') {
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_id') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
-k
+    }
+
+    stage('Trigger deploy..') {
+        sh 'curl https://api.render.com/deploy/srv-cn92e6v109ks739s1sj0?key=QSUb0v-o00E'
+    }
+}
