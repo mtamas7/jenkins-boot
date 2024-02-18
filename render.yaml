@@ -40,7 +40,7 @@ services:
       url: https://hub.docker.com/r/imotszeged/test-boot
       creds:
         fromRegistryCreds:
-          name: dockerhub
+          name: docker
     region: frankfurt
     plan: free
     healthCheckPath: /
