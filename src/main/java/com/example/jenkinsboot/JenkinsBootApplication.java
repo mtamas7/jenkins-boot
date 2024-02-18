@@ -22,7 +22,7 @@ public class JenkinsBootApplication {
 
             repository.save(new SampleEntity(1L, "Chicken"));
             repository.save(new SampleEntity(2L, "Potato"));
-            repository.save(new SampleEntity(3L, "Salad"));
+            repository.save(new SampleEntity(3L, "Kolbász"));
         };
     }
 
