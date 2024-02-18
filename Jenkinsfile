@@ -15,7 +15,6 @@ node {
        app.push("latest")
               }
            }
-           stages {
 
              stage('Trigger deploy..') {
 
@@ -25,5 +24,4 @@ node {
 
                 }
              }
-           }
         }
