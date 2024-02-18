@@ -38,12 +38,12 @@ services:
     runtime: image
     image:
       url: https://hub.docker.com/r/imotszeged/test-boot
+      creds:
+        fromRegistryCreds:
+          name: dockerhub
     region: frankfurt
     plan: free
     healthCheckPath: /
-    registryCredential: # optional (defaults to no credential)
-      fromRegistryCreds:
-        name: dockerhub
     envVars:
       - key: SPRING_DATASOURCE_CONNECTION_STRING
         fromDatabase:
